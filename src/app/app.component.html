@@ -1,23 +1,30 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-      <form [formGroup]="form">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            formControlName="username"
-            class="form-control">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div formGroupName="userdata">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              class="form-control">
+            <span *ngIf="!form.get('userdata.username').valid && form.get('userdata.username').touched" class="help-block">
+              <span *ngIf="form.get('userdata.username').errors['nameIsForbidden']">This name is forbidden!</span>
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="email">email</label>
+            <input
+              type="text"
+              id="email"
+              formControlName="email"
+              class="form-control">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="email">email</label>
-          <input
-            type="text"
-            id="email"
-            formControlName="email"
-            class="form-control">
-        </div>
+
         <div class="radio" *ngFor="let gender of genders">
           <label>
             <input
@@ -26,7 +33,16 @@
               [value]="gender">{{ gender }}
           </label>
         </div>
-        <button class="btn btn-primary" type="submit" (click)="onSubmit()">Submit</button>
+
+        <div formArrayName="hobbies">
+          <h4>Your Hobbies:</h4>
+          <button class="btn btn-default" type="button" (click)="onAddHobby()">Add Hobby</button>
+          <div class="form-group" *ngFor="let hobbyControl of controls; let i = index">
+            <input type="text" class="form-control" [formControlName]="i">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
       </form>
     </div>
   </div>
